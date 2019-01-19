@@ -1,0 +1,26 @@
+{
+  "name": "bambu.life",
+  "version": "1.0.0",
+  "description": "Coding Challange from Bambu.life",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Refiqi/Bambu.Life.git"
+  },
+  "keywords": [
+    "API",
+    "DATABASE"
+  ],
+  "author": "Refiqi Muhamad Fadila",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Refiqi/Bambu.Life/issues"
+  },
+  "homepage": "https://github.com/Refiqi/Bambu.Life#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.5"
+  }
+}
