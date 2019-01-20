@@ -27,7 +27,9 @@ mongoose.connect(mongoDbURI, { useNewUrlParser: true }, err => {
 
 
 
+// Using Routes
 
+app.use(require('./routes/user'));
 
 // Port For Deploying to heroku or Localhost
 
