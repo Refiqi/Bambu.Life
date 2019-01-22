@@ -5,8 +5,8 @@ const UserSchema = new Schema ({
 
     name: String,
     age: Number,
-    latitude: String,
-    longitude: String,
+    latitude: Number,
+    longitude: Number,
     monthlyIncome: Number,
     experienced: Boolean,
     score: Number
