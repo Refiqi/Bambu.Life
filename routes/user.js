@@ -84,7 +84,6 @@ router.get("/people-like-you", (req, res) => {
       // Sorting Score Descending If there's a Match
 
       if (scoredUser) {
-
       scoredUser.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
         // Sending The Data as JSON to API
         let peopleLikeYou = {
@@ -94,7 +93,7 @@ router.get("/people-like-you", (req, res) => {
 
       } else {
 
-          res.send({peopleLikeYou: "There's no Match for people you searched"})
+          res.status(422).send({peopleLikeYou: "There's no Match for people you searched"})
 
       }
 

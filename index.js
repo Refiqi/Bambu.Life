@@ -14,12 +14,14 @@ const exphbs = require('express-handlebars');
 
 const path = require('path');
 
-// Importing Body Parser for Parsering the data to Json and urlencoded
+// Importing Body Parser for Parse application/json and look for raw text
 
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.text());                                    
+app.use(bodyParser.json({ type: 'application/json'}));  
 
 // Connecting to Our Remote Database with mLab
 
@@ -53,3 +55,5 @@ app.listen(port, (err)=>{
     if (err) throw err;
     console.log(`Server is running at port ${port}`)
 });
+
+module.exports = app;  // For Testing Purpose
