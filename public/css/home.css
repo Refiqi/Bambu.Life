@@ -1,0 +1,19 @@
+body {
+    padding-top: 100px;
+  }
+  
+  @media (min-width: 992px) {
+    body {
+      padding-top: 56px;
+    }
+  }
+
+  .card {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 75%;
+}
+
+.card-title {
+    text-align: center
+}

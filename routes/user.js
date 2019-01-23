@@ -21,7 +21,7 @@ const similarity = require("string-similarity");
 // Root Router for API
 
 router.get("/", (req, res) => {
-  res.send("hello");
+  res.render('home');
 });
 
 // Query for Database
@@ -33,7 +33,7 @@ router.get("/people-like-you", (req, res) => {
     query.push({
       age: {
         $gte: Math.max(0, req.query.age - 2),
-        $lte: parseInt(req.query.age + 2)
+        $lte: parseInt(req.query.age) + 2
       }
     });
   }
@@ -42,7 +42,7 @@ router.get("/people-like-you", (req, res) => {
     query.push({
       latitude: {
         $gte: req.query.latitude - 2,
-        $lte: req.query.latitude + 2
+        $lte: parseInt(req.query.latitude) + 2
       }
     });
   }
@@ -51,7 +51,7 @@ router.get("/people-like-you", (req, res) => {
     query.push({
       longitude: {
         $gte: req.query.longitude - 2,
-        $lte: req.query.longitude + 2
+        $lte: parseInt(req.query.longitude) + 2
       }
     });
   }
@@ -66,7 +66,6 @@ router.get("/people-like-you", (req, res) => {
   }
 
   let scoredUser;
-
   // Query ind Database with Find method and $and Operator
 
   User.find({
@@ -85,7 +84,10 @@ router.get("/people-like-you", (req, res) => {
       scoredUser.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
 
       // Sending The Data as JSON to API
-      res.send(scoredUser);
+      let userLikeYou = {
+        peopleLikeYou : scoredUser
+}
+      res.send(userLikeYou);
     });
 });
 

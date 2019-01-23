@@ -6,6 +6,14 @@ const express = require('express');
 
 const app = express();
 
+// Importing Handlebard nmp
+
+const exphbs = require('express-handlebars');
+
+// Importing Middleware Path
+
+const path = require('path');
+
 // Importing Body Parser for Parsering the data to Json and urlencoded
 
 const bodyParser = require('body-parser');
@@ -23,13 +31,19 @@ mongoose.connect(mongoDbURI, { useNewUrlParser: true }, err => {
     console.log('MongoDB Connected')
 });
 
+// Styling for Views
 
-
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Using Routes
 
 app.use(require('./routes/user'));
+
+// Using Handlebars as the Template View
+
+app.engine('handlebars', exphbs({ defaultLayout: 'home' }));
+app.set('view engine', 'handlebars');
 
 // Port For Deploying to heroku or Localhost
 
