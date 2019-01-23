@@ -1,84 +1,92 @@
 // Importing Express Module
 
-const express = require('express');
+const express = require("express");
 
 // Using Express Router Function
+
 const router = express.Router();
 
 // Importing Models Schema from Database
-const User = require('../models/User');
 
-// Using Leven NPM
+const User = require("../models/User");
 
-function round(value, precision) {
-    var multiplier = Math.pow(10, precision || 0);
-    return Math.round(value * multiplier) / multiplier;
-}
+// Using helpers for Rounding up decimal score
 
-const similarity = require('string-similarity');
+const { round } = require("../helpers/round.js");
 
-router.get('/', (req, res)=>{
-   
-    let query = {};
+// Using String-similarity for Scoring similar String
 
-    if (req.query.age) {
-        query.age = req.query.age;
-    }
-    if(req.query.latitude) {
-        query.latitude = req.query.latitude;
-    }
-    if(req.query.monthlyIncome) {
-        query.monthlyIncome = req.query.monthlyIncome;
-    }
-    if (req.query.longitude) {
-        query.longitude = req.query.longitude;
-    }
-    if(req.query.experienced) {
-        query.experienced = req.query.experienced;
-    }
+const similarity = require("string-similarity");
 
-    User.find({
-        $or: [
-            { age: { $gte: query.age - 2, $lte: query.age + 2 } },
-            { latitude: { $gte: query.latitude - 2, $lte: query.latitude } },
-            { longitude: { $gte: query.longitude - 2, $lte: query.longitude + 2 } },
-            { monthlyIncome: { $gte: query.monthlyIncome -500, $lte: query.monthlyIncome + 500 } },
-            { experienced: query.experienced} 
-        ]
-    })
-    .limit(1000)
-    .then(users=>{
-        res.send(users)
-        // users.forEach(function(user) {
-        //     score = round([similarity.compareTwoStrings(user.toString(), JSON.stringify(query))],1);
-        //     console.log(user)
-            
-        //     let criteria = {
-        //         _id: { $in: user._id}
-        //     };
-        //     User.update(criteria, { score: score }, { multi: true },function (err,result) {
-        //         if (err) console.log(err);
-        //     })
-        // });
-        // User.find({})
-        // .sort({'score': -1})
-        // .limit(10)
-        // .then(user=>{
-        //     res.send(user)
-        // });
+// Root Router for API
+
+router.get("/", (req, res) => {
+  res.send("hello");
+});
+
+// Query for Database
+
+router.get("/people-like-you", (req, res) => {
+  let query = [];
+
+  if (req.query.age) {
+    query.push({
+      age: {
+        $gte: Math.max(0, req.query.age - 2),
+        $lte: parseInt(req.query.age + 2)
+      }
+    });
+  }
+
+  if (req.query.latitude) {
+    query.push({
+      latitude: {
+        $gte: req.query.latitude - 2,
+        $lte: req.query.latitude + 2
+      }
+    });
+  }
+
+  if (req.query.longitude) {
+    query.push({
+      longitude: {
+        $gte: req.query.longitude - 2,
+        $lte: req.query.longitude + 2
+      }
+    });
+  }
+
+  if (req.query.monthlyIncome) {
+    query.push({
+      monthlyIncome: {
+        $gte: req.query.monthlyIncome - 500,
+        $lte: parseInt(req.query.monthlyIncome) + 500
+      }
+    });
+  }
+
+  let scoredUser;
+
+  // Query ind Database with Find method and $and Operator
+
+  User.find({
+    $and: query
+  })
+    .limit(10)
+    .then(users => {
+      users.forEach(function(user) {
+        hitScore = round([similarity.compareTwoStrings(user.toString(), JSON.stringify(query))],1);
+        user.score = hitScore + 0.5;
+        scoredUser = users;
+      });
+
+      // Sorting Score Descending
+
+      scoredUser.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
+
+      // Sending The Data as JSON to API
+      res.send(scoredUser);
     });
 });
-//             user.update({_id: user.id}, { $set: { score: score }});
-
-router.get('/people-like-you', (req, res)=>{
-
-    User.find({})
-    .limit(10)
-    .then(users=>{
-        res.send(users);
-    })
-
-});
-
 
 module.exports = router;
