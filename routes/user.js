@@ -65,7 +65,9 @@ router.get("/people-like-you", (req, res) => {
     });
   }
 
+  // Declaring a global Variable that will store The Scored user
   let scoredUser;
+
   // Query ind Database with Find method and $and Operator
 
   User.find({
@@ -79,15 +81,25 @@ router.get("/people-like-you", (req, res) => {
         scoredUser = users;
       });
 
-      // Sorting Score Descending
+      // Sorting Score Descending If there's a Match
+
+      if (scoredUser) {
 
       scoredUser.sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
+        // Sending The Data as JSON to API
+        let peopleLikeYou = {
+            peopleLikeYou : scoredUser
+            }
+        res.send(peopleLikeYou);
 
-      // Sending The Data as JSON to API
-      let userLikeYou = {
-        peopleLikeYou : scoredUser
-}
-      res.send(userLikeYou);
+      } else {
+
+          res.send({peopleLikeYou: "There's no Match for people you searched"})
+
+      }
+
+    }).catch(err=>{
+        if (err) res.send('Please Enter at lease one field query')
     });
 });
 
