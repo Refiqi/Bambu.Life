@@ -29,6 +29,8 @@ router.get("/", (req, res) => {
 router.get("/people-like-you", (req, res) => {
   let query = [];
 
+// Making The Query Optional
+
   if (req.query.age) {
     query.push({
       age: {
@@ -68,7 +70,7 @@ router.get("/people-like-you", (req, res) => {
   // Declaring a global Variable that will store The Scored user
   let scoredUser;
 
-  // Query ind Database with Find method and $and Operator
+  // Query in Database with Find method and $and Operator
 
   User.find({
     $and: query
@@ -92,13 +94,16 @@ router.get("/people-like-you", (req, res) => {
         res.send(peopleLikeYou);
 
       } else {
+            // If There's no match then Will throw this error message
 
           res.status(422).send({peopleLikeYou: "There's no Match for people you searched"})
 
       }
 
+      // If There's no Query Given It Will Throw An Error Message
+
     }).catch(err=>{
-        if (err) res.send('Please Enter at lease one field query')
+        if (err) res.send('Error: Please Enter at lease one field query')
     });
 });
 
