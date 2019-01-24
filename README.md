@@ -7,4 +7,4 @@ Check it out on Heroku :
 
 ## Flowchart
 
-![alt text](https://github.com/Refiqi/Bambu.Life/tree/master/public/images/Bambu.Life.png "Flowchart")
+![alt text](https://github.com/Refiqi/Bambu.Life/blob/master/public/images/Bambu.Life.png "Flowchart")
